@@ -24,20 +24,31 @@ export const RecipientsList = ({ title, hasSearch, onClickItem, list }: Props) =
       )}
 
       <Box border="1px solid" borderRadius={4} p={4}>
-        {/* <details open>
-          <summary>timescale.com</summary>
-          <List pl={6} width="fit-content">
-            <ListItem _hover={{ backgroundColor: 'gray.100' }}>ann@timescale.com</ListItem>
-            <ListItem>ann@timescale.com</ListItem>
-          </List>
-        </details> */}
-
         <List>
-          {list.map((entry) => (
-            <ListItem _hover={{ backgroundColor: 'gray.100', cursor: 'pointer' }} key={entry.email}>
-              {entry.email}
-            </ListItem>
-          ))}
+          {list.map((entry) => {
+            if (entry.isDomain) {
+              return (
+                <details open>
+                  <Box as="summary" _hover={{ backgroundColor: 'gray.100', cursor: 'pointer' }}>
+                    {entry.email}
+                  </Box>
+                  <List pl={6}>
+                    {entry.recipients.map((recipients) => (
+                      <ListItem _hover={{ backgroundColor: 'gray.100', cursor: 'pointer' }} key={recipients.email}>
+                        {recipients.email}
+                      </ListItem>
+                    ))}
+                  </List>
+                </details>
+              );
+            }
+
+            return (
+              <ListItem _hover={{ backgroundColor: 'gray.100', cursor: 'pointer' }} key={entry.email}>
+                {entry.email}
+              </ListItem>
+            );
+          })}
         </List>
       </Box>
     </Box>

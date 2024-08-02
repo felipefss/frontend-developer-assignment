@@ -6,6 +6,7 @@ import { fetchData } from '../utils/fetchData';
 
 // TODO: Check if email already exists in list
 
+// TODO: move this to another file
 // Aggregate emails with the same domain
 const normalizeData = (data: RecipientData[]) => {
   const domains: Record<string, RecipientData[]> = {};
@@ -48,7 +49,7 @@ const App = () => {
     fetchData().then((data) => setRecipients(normalizeData(data)));
   }, []);
 
-  // TODO: move the following two to a hook and use useMemo
+  // TODO: move the following two to a hook
   const selectedRecipients = recipients.reduce<Recipient[]>((output, recipient) => {
     if (recipient.isSelected) {
       return [...output, recipient];

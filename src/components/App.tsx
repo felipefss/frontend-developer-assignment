@@ -3,7 +3,11 @@ import { Box } from '@chakra-ui/react';
 import { RecipientsList } from './RecipientsList';
 import { Recipient } from '../types/recipients';
 import { fetchData } from '../utils/fetchData';
-import { normalizeRecipientData, splitAvailableSelectedRecipients } from '../utils/recipient-funcs';
+import {
+  normalizeRecipientData,
+  setIsSelectedByEmail,
+  splitAvailableSelectedRecipients,
+} from '../utils/recipient-funcs';
 
 // TODO: Check if email already exists in list
 
@@ -18,11 +22,24 @@ const App = () => {
 
   const { availableRecipients, selectedRecipients } = splitAvailableSelectedRecipients(recipients);
 
+  const onClickAvailableRecipient = (email: string) => {
+    setRecipients((prev) => setIsSelectedByEmail(prev, email, true));
+  };
+
+  const onClickSelectedRecipient = (email: string) => {
+    setRecipients((prev) => setIsSelectedByEmail(prev, email, false));
+  };
+
   return (
     <Box as="main" p={8}>
       <Box maxW="50rem" display="flex" gap={4}>
-        <RecipientsList title="Available recipients" hasSearch={true} list={availableRecipients} />
-        <RecipientsList title="Selected recipients" list={selectedRecipients} />
+        <RecipientsList
+          title="Available recipients"
+          onClickItem={onClickAvailableRecipient}
+          hasSearch={true}
+          list={availableRecipients}
+        />
+        <RecipientsList title="Selected recipients" onClickItem={onClickSelectedRecipient} list={selectedRecipients} />
       </Box>
     </Box>
   );

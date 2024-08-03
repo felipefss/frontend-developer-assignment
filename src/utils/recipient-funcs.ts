@@ -19,7 +19,7 @@ export const normalizeRecipientData = (data: RecipientData[]) => {
       return {
         isDomain: true,
         email: domainName,
-        isSelected: false,
+        isSelected: undefined,
         recipients,
       };
     }
@@ -76,4 +76,32 @@ export const splitAvailableSelectedRecipients = (recipients: Recipient[]) => {
     selectedRecipients,
     availableRecipients,
   };
+};
+
+export const setIsSelectedByEmail = (recipients: Recipient[], email: string, isSelected: boolean) => {
+  const changedState = [...recipients];
+
+  for (const recipient of changedState) {
+    if (recipient.email === email) {
+      if (recipient.isDomain) {
+        recipient.recipients.forEach((r) => {
+          r.isSelected = isSelected;
+        });
+        break;
+      }
+      recipient.isSelected = isSelected;
+      break;
+    }
+
+    if (recipient.recipients) {
+      for (const insideRecipient of recipient.recipients) {
+        if (insideRecipient.email === email) {
+          insideRecipient.isSelected = isSelected;
+          break;
+        }
+      }
+    }
+  }
+
+  return changedState;
 };

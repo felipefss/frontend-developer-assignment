@@ -2,8 +2,6 @@ import { Box } from '@chakra-ui/react';
 import { RecipientsList } from './RecipientsList';
 import { useRecipientListContext } from '../context/RecipientListContext';
 
-// TODO: Check if email already exists in list
-
 const App = () => {
   const { onClickAvailableRecipient, onClickSelectedRecipient, availableRecipients, selectedRecipients } =
     useRecipientListContext();

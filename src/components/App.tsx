@@ -1,34 +1,12 @@
-import { useEffect, useState } from 'react';
 import { Box } from '@chakra-ui/react';
 import { RecipientsList } from './RecipientsList';
-import { Recipient } from '../types/recipients';
-import { fetchData } from '../utils/fetchData';
-import {
-  normalizeRecipientData,
-  setIsSelectedByEmail,
-  splitAvailableSelectedRecipients,
-} from '../utils/recipient-funcs';
+import { useRecipientListContext } from '../context/RecipientListContext';
 
 // TODO: Check if email already exists in list
 
 const App = () => {
-  // In a more complex app, all of this logic would be in a Context or state management library
-  const [recipients, setRecipients] = useState<Recipient[]>([]);
-
-  useEffect(() => {
-    // Simulating data fetching
-    fetchData().then((data) => setRecipients(normalizeRecipientData(data)));
-  }, []);
-
-  const { availableRecipients, selectedRecipients } = splitAvailableSelectedRecipients(recipients);
-
-  const onClickAvailableRecipient = (email: string) => {
-    setRecipients((prev) => setIsSelectedByEmail(prev, email, true));
-  };
-
-  const onClickSelectedRecipient = (email: string) => {
-    setRecipients((prev) => setIsSelectedByEmail(prev, email, false));
-  };
+  const { onClickAvailableRecipient, onClickSelectedRecipient, availableRecipients, selectedRecipients } =
+    useRecipientListContext();
 
   return (
     <Box as="main" p={8}>

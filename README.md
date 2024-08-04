@@ -19,7 +19,7 @@ As a user, I can
 
 - [x] See the list of all available recipients. A recipient is either an email or a group of emails sharing the same company domain
 - [x] Select an individual recipient or a company domain. When a company domain is selected, all emails with the domain are added to the selected recipients' list
-- [ ] Enter the name of a company into the autocomplete and select a recipient from the available suggestions
+- [x] Enter the name of a company into the autocomplete and select a recipient from the available suggestions
 - [ ] Enter any email in the autocomplete. If the email passes validation it is possible to add it to the list of available recipients
 - [x] See the list of the selected recipients that are grouped into company and email recipients. The groups are expandable and show the contained members
 - [x] Remove the recipients from the selected list. It is possible to remove an individual email or all emails sharing a domain at once

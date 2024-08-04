@@ -1,7 +1,7 @@
-import { Search2Icon } from '@chakra-ui/icons';
-import { Box, Input, InputGroup, InputLeftElement, List, ListItem } from '@chakra-ui/react';
+import { Box, List, ListItem } from '@chakra-ui/react';
 import { Recipient } from '../types/recipients';
-import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { SearchInput } from './SearchInput';
 
 type Props = {
   title: string;
@@ -11,67 +11,25 @@ type Props = {
 };
 
 export const RecipientsList = ({ title, hasSearch, onClickItem, list }: Props) => {
-  const [searchText, setSearchText] = useState('');
   const [filteredList, setFilteredList] = useState<Recipient[]>([]);
 
-  const companyList = useMemo(() => list.map((recipient) => recipient.email.match(/(?:\w+@)?(\S+)\.\S+/)[1]), [list]);
-
+  // This could be done differently. Perhaps have a wrapper component and then two separate for each list
+  // Then, this side effect wouldn't be needed
   useEffect(() => {
-    if (searchText.length === 0) {
+    if (!hasSearch) {
       setFilteredList(list);
     }
-  }, [list, searchText]);
+  }, [hasSearch, list]);
 
-  const handleChangeSearchText = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-
-    if (companyList.includes(value)) {
-      setFilteredList(
-        list.reduce((output, recipient) => {
-          if (!recipient.isDomain && recipient.email.includes(value)) {
-            return [...output, recipient];
-          }
-
-          if (recipient.isDomain) {
-            const filteredRecipients = recipient.recipients.filter((rec) => rec.email.includes(value));
-
-            output.push(...filteredRecipients);
-          }
-
-          return output;
-        }, [])
-      );
-    } else {
-      setFilteredList(list);
-    }
-
-    setSearchText(value);
+  const handleUpdateRecipientList = (updatedList: Recipient[]) => {
+    setFilteredList(updatedList);
   };
 
   return (
     <Box as="fieldset" border="1px solid" borderRadius={4} display="flex" flexDir="column" flex={1} gap={4} p={4}>
       <legend>{title}</legend>
 
-      {hasSearch && (
-        <InputGroup>
-          <InputLeftElement pointerEvents="none">
-            <Search2Icon />
-          </InputLeftElement>
-          <Input
-            borderColor="black"
-            list="companies"
-            placeholder="search"
-            value={searchText}
-            onChange={handleChangeSearchText}
-          />
-
-          <datalist id="companies">
-            {companyList.map((company) => (
-              <option value={company} key={company} />
-            ))}
-          </datalist>
-        </InputGroup>
-      )}
+      {hasSearch && <SearchInput recipientList={list} updateRecipientList={handleUpdateRecipientList} />}
 
       <Box border="1px solid" borderRadius={4} flex={1} p={4}>
         <List>

@@ -43,6 +43,7 @@ export const RecipientsList = ({ title, hasSearch, onClickItem, list }: Props) =
                       onClickItem(entry.email);
                     }}
                     _hover={{ backgroundColor: 'gray.100', cursor: 'pointer' }}
+                    data-testid="summary"
                   >
                     {entry.email}
                   </Box>

@@ -1,16 +1,12 @@
 import '@testing-library/jest-dom';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import fetchMock from 'jest-fetch-mock';
 
 import { RecipientListProvider } from '../context/RecipientListContext';
 import { RecipientsList } from './RecipientsList';
 import { RecipientData } from '../types/recipients';
-import * as utils from '../utils/recipient-funcs';
 import { normalizeRecipientData, splitAvailableSelectedRecipients } from '../utils/recipient-funcs';
 import App from './App';
-
-fetchMock.enableMocks();
 
 const recipientsDataMock: RecipientData[] = [
   {
@@ -67,5 +63,22 @@ describe('Recipients list', () => {
     await waitFor(() => {
       expect(screen.getByText('abc@omg.com')).toBeInTheDocument();
     });
+  });
+
+  it('should move an email to the selected column when clicked', async () => {
+    render(
+      <RecipientListProvider>
+        <App />
+      </RecipientListProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('jose@awesome.com')).toBeInTheDocument();
+    });
+
+    const email = screen.getByText('jose@awesome.com');
+    await userEvent.click(email);
+
+    expect(within(screen.getAllByTestId('outer-list')[1]).getByText('jose@awesome.com')).toBeInTheDocument();
   });
 });

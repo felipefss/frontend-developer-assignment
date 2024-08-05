@@ -32,7 +32,7 @@ export const RecipientsList = ({ title, hasSearch, onClickItem, list }: Props) =
       {hasSearch && <SearchInput recipientList={list} updateRecipientList={handleUpdateRecipientList} />}
 
       <Box border="1px solid" borderRadius={4} flex={1} p={4}>
-        <List>
+        <List data-testid="outer-list">
           {filteredList.map((entry) => {
             if (entry.isDomain) {
               return (

@@ -1,6 +1,5 @@
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Recipient } from '../types/recipients';
-import { fetchData } from '../utils/fetchData';
 import {
   normalizeRecipientData,
   setIsSelectedByEmail,
@@ -26,7 +25,9 @@ export const RecipientListProvider = ({ children }: ProviderProps) => {
 
   useEffect(() => {
     // Simulating data fetching
-    fetchData().then((data) => setRecipients(normalizeRecipientData(data)));
+    fetch('/recipientsData.json')
+      .then((res) => res.json())
+      .then((data) => setRecipients(normalizeRecipientData(data)));
   }, []);
 
   const { availableRecipients, selectedRecipients } = splitAvailableSelectedRecipients(recipients);
@@ -80,7 +81,6 @@ export const RecipientListProvider = ({ children }: ProviderProps) => {
       return [...prev, newEntry];
     });
   }, []);
-  console.log(recipients);
 
   const value = useMemo(
     () => ({
